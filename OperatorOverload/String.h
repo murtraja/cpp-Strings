@@ -59,6 +59,7 @@ public:
 
 	void Assign(const char* ptr);
 	void Print();
+	String Split(int index);
 };
 
 /*

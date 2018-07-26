@@ -46,7 +46,9 @@ void String::SetString(const String & other)
 
 void String::Insert(int index, const char *source)
 {
-	
+	String rhs = Split(index);
+	(*this) += source;
+	(*this) += rhs;
 }
 
 void String::Insert(int index, const String & source)
@@ -71,6 +73,13 @@ void String::TrimLeft(int n)
 
 void String::TrimRight(int n)
 {
+	if (n <= 0 || n >= m_length)
+	{
+		return;
+	}
+
+	m_buffer[m_length - n] = '\0';
+	m_length -= n;
 }
 
 int String::Find(const char *str, int index)
@@ -103,6 +112,7 @@ int String::FindWholeWord(const String & str)
 String & String::operator=(const char * str)
 {
 	// TODO: insert return statement here
+	return (*this);
 }
 
 String & String::operator=(const String & other)
@@ -148,12 +158,20 @@ String & String::operator+=(const String & other)
 
 String & String::operator+=(const char * str)
 {
-	// TODO: insert return statement here
+	int newLength = m_length + strlen(str);
+	char* newString = new char[newLength + 1];
+	strcpy(newString, m_buffer);
+	strcat(newString, str);
+	delete[] m_buffer;
+	m_buffer = newString;
+	m_length = newLength;
+	return (*this);
 }
 
 String & String::operator+=(char ch)
 {
 	// TODO: insert return statement here
+	return (*this);
 }
 
 String String::operator+(const String & other)
@@ -165,12 +183,12 @@ String String::operator+(const String & other)
 
 const char & String::operator[](int index) const
 {
-	// TODO: insert return statement here
+	return m_buffer[index];
 }
 
 char & String::operator[](int index)
 {
-	// TODO: insert return statement here
+	return m_buffer[index];
 }
 
 bool String::operator==(const String & other)
