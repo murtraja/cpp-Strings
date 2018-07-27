@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "String.h"
 #include <iostream>
+#include <cassert>
 
 void String::Allocate(const char * ptr)
 {
@@ -69,17 +70,26 @@ void String::RemoveAll(char ch)
 
 void String::TrimLeft(int n)
 {
+	assert(n>=1 && n<m_length);
+	
+	char *newBuffer = new char[m_length - n + 1];
+	strcpy(newBuffer, m_buffer + n);
+	newBuffer[m_length - n] = 0;
+	m_length -= n;
+	delete[] m_buffer;
+	m_buffer = newBuffer;
 }
 
 void String::TrimRight(int n)
 {
-	if (n <= 0 || n >= m_length)
-	{
-		return;
-	}
+	assert(n >= 1 && n<m_length);
 
-	m_buffer[m_length - n] = '\0';
+	char *newBuffer = new char[m_length - n + 1];
+	strncpy(newBuffer, m_buffer, m_length - n);
+	newBuffer[m_length - n] = 0;
 	m_length -= n;
+	delete[] m_buffer;
+	m_buffer = newBuffer;
 }
 
 int String::Find(const char *str, int index)
